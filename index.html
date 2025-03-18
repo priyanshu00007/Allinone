@@ -3,22 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Navbar & Features</title>
+    <title>Futuristic Dashboard - Home</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary: #22d3ee;
+            --secondary: #9333ea;
+            --accent: #ff007a;
+            --dark: #0d1b2a;
+            --darker: #0a1622;
+            --light: #e0f7fa;
+            --gradient-main: linear-gradient(135deg, #0d1b2a, #1b263b);
+            --gradient-accent: linear-gradient(90deg, var(--primary), var(--accent));
+            --gradient-button: linear-gradient(90deg, var(--primary), var(--secondary));
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        body {
+            background: var(--gradient-main);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--light);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
         /* Navbar Styles */
         .navbar {
-            background-color: #333;
+            background: rgba(11, 27, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
             padding: 1rem;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .nav-container {
@@ -30,45 +66,170 @@
         }
 
         .logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.3);
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
+            gap: 2rem;
         }
 
         .nav-item {
-            margin-left: 2rem;
+            position: relative;
         }
 
         .nav-link {
-            color: white;
+            color: var(--light);
             text-decoration: none;
-            font-size: 1.1rem;
-            transition: color 0.3s ease;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: var(--transition-standard);
+            cursor: pointer;
         }
 
         .nav-link:hover {
-            color: #00b4d8;
+            color: var(--primary);
+            text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
         }
 
         .menu-toggle {
             display: none;
-            color: white;
+            color: var(--primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: var(--transition-standard);
+        }
+
+        .menu-toggle.active {
+            content: '×';
+            transform: rotate(0);
+        }
+
+        /* Home Section */
+        .home-section {
+            min-height: 100vh;
+            text-align: center;
+            padding: 4rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .home-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+            margin-bottom: 1.5rem;
+        }
+
+        .home-subtitle {
             font-size: 1.5rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient-button);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 2rem;
+            transition: var(--transition-standard);
             cursor: pointer;
         }
 
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 7px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        /* Page Content */
+        .page-content {
+            min-height: 100vh;
+            padding: 4rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-text {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
         /* Features Section */
-        .features {
-            margin-top: 80px;
-            padding: 2rem;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+        .features-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-accent);
+            border-radius: 2px;
         }
 
         .feature-grid {
@@ -79,26 +240,175 @@
         }
 
         .feature-card {
-            background-color: #f5f5f5;
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 12px;
             padding: 2rem;
-            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
             text-align: center;
+            transition: var(--transition-standard);
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
         }
 
         .feature-card h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            color: #333;
+            color: var(--light);
+            transition: var(--transition-standard);
+        }
+
+        .feature-card:hover h2 {
+            color: var(--primary);
         }
 
         .feature-card p {
-            color: #666;
+            color: var(--light);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .feature-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* Growth & Stats Section */
+        .stats-section {
+            padding: 4rem 0;
+            background: rgba(11, 27, 42, 0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(34, 211, 238, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            transition: var(--transition-standard);
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.2);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker);
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(34, 211, 238, 0.2);
+            position: relative;
+        }
+
+        .footer-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: var(--transition-standard);
+            cursor: pointer;
+        }
+
+        .footer-link:hover {
+            color: var(--primary);
+            text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-icon {
+            color: var(--light);
+            font-size: 1.5rem;
+            transition: var(--transition-standard);
+            cursor: pointer;
+        }
+
+        .social-icon:hover {
+            color: var(--accent);
+            transform: scale(1.2);
+        }
+
+        .footer-text {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
         }
 
         /* Responsive Design */
@@ -113,9 +423,11 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                background-color: #333;
+                background: rgba(11, 27, 42, 0.9);
+                backdrop-filter: blur(10px);
                 flex-direction: column;
                 padding: 1rem;
+                border-bottom: 1px solid rgba(34, 211, 238, 0.2);
             }
 
             .nav-menu.active {
@@ -125,77 +437,294 @@
             .nav-item {
                 margin: 1rem 0;
             }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .home-title {
+                font-size: 3rem;
+            }
+
+            .home-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Particles */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
         }
     </style>
 </head>
 <body>
+    <!-- Background Particles -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-trail" id="cursorTrail"></div>
+
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">MyWebsite</div>
+            <div class="logo">FutureHub</div>
             <ul class="nav-menu">
-                <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" data-section="home-section">Home</a></li>
+                <li class="nav-item"><a class="nav-link" data-section="about-section">About</a></li>
+                <li class="nav-item"><a class="nav-link" data-section="features-section">Features</a></li>
+                <li class="nav-item"><a class="nav-link" data-section="contact-section">Contact</a></li>
             </ul>
-            <div class="menu-toggle">☰</div>
+            <div class="menu-toggle" id="menuToggle">☰</div>
         </div>
     </nav>
 
+    <!-- Home Section -->
+    <section id="home-section" class="home-section">
+        <div class="container">
+            <h1 class="home-title">Welcome to FutureHub</h1>
+            <p class="home-subtitle">Step into the future with cutting-edge tools designed to empower your creativity and productivity. Explore a universe of possibilities today.</p>
+            <a class="cta-button" data-section="features-section">Discover Now</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about-section" class="page-content">
+        <div class="container">
+            <h2 class="page-title">About Us</h2>
+            <p class="page-text">FutureHub is a platform built for innovators. We blend advanced technology with intuitive design to create tools that transform how you work, create, and connect. Our mission is to push boundaries and redefine what’s possible.</p>
+        </div>
+    </section>
+
     <!-- Features Section -->
-    <section class="features">
-        <div class="feature-grid">
-            <div class="feature-card">
-               <a href="./cameraintotext.html"> <h2>camera</h2></a>
-                <p>Monitor your progress and statistics in real-time</p>
-            </div>
-            <div class="feature-card" >
-                <a href="./test.html"><h2>pdf into speak</h2></a>
-                <p>Customize your personal information and settings</p>
-            </div>
-            <div class="feature-card" >
-               <a href="imageintopdf.html"> <h2>cameraintotext</h2></a>
-                <p>Get detailed insights and performance metrics</p>
-            </div>
-            <div class="feature-card" data-page="imageintotext.html">
-                <a href="imageintotext.html"><h2>imageintotext</h2></a>
-                <p>Access powerful utilities for your tasks</p>
-            </div>
-            <div class="feature-card" data-page="song.html">
-                <a href="./song.htm"><h2>song </h2></a>
-                <p>Get help whenever you need it</p>
+    <section id="features-section" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Core Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <a href="./cameraintotext.html"><h2>Camera to Text</h2></a>
+                    <p>Convert real-world visuals into editable text instantly with advanced OCR technology.</p>
+                </div>
+                <div class="feature-card">
+                    <a href="./test.html"><h2>PDF into Speech</h2></a>
+                    <p>Transform PDFs into immersive audio experiences with customizable voice synthesis.</p>
+                </div>
+                <div class="feature-card">
+                    <a href="./imageintopdf.html"><h2>Image to PDF</h2></a>
+                    <p>Create professional PDFs from images with a single click, perfect for documentation.</p>
+                </div>
+                <div class="feature-card">
+                    <a href="./imageintotext.html"><h2>Image to Text</h2></a>
+                    <p>Extract text from images effortlessly, enhancing accessibility and productivity.</p>
+                </div>
+                <div class="feature-card">
+                    <a href="./song.html"><h2>Song Generator</h2></a>
+                    <p>Compose original music with AI-driven tools tailored to your creative vision.</p>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Contact Section -->
+    
+
+    <!-- Growth & Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title">Growth & Impact</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-target="10000">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="500000">0</div>
+                    <div class="stat-label">Documents Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="99.9">0</div>
+                    <div class="stat-label">Uptime Reliability</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-target="30">0</div>
+                    <div class="stat-label">Countries Served</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="contact-section" class="page-content">
+        <div class="container">
+            <h2 class="page-title">Contact Us</h2>
+            <p class="page-text">Have questions or ideas? Reach out to us at <a href="mailto:support@futurehub.com" style="color: var(--primary);">support@futurehub.com</a>. We’re here to help you navigate the future.</p>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <h3 class="footer-title">FutureHub</h3>
+            <div class="footer-links">
+                <a class="footer-link" data-section="home-section">Home</a>
+                <a class="footer-link" data-section="about-section">About</a>
+                <a class="footer-link" data-section="features-section">Features</a>
+                <a class="footer-link" data-section="contact-section">Contact</a>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-discord"></i></a>
+            </div>
+            <p class="footer-text">© 2025 FutureHub. All rights reserved. | Pioneering the Next Frontier.</p>
+        </div>
+    </footer>
+
+    <!-- GSAP and ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <script>
+        // GSAP Initialization
+        gsap.registerPlugin(ScrollTrigger);
+
         // Mobile menu toggle
-        const menuToggle = document.querySelector('.menu-toggle');
+        const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.querySelector('.nav-menu');
 
         menuToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
-        });
-
-        // Feature card click handler
-        const featureCards = document.querySelectorAll('.feature-card');
-
-        featureCards.forEach(card => {
-            card.addEventListener('click', () => {
-                const page = card.getAttribute('data-page');
-                // For demonstration, we'll use alert. In production, replace with actual navigation
-                // Uncomment below line for actual redirection
-                // window.location.href = page;
-            });
+            menuToggle.classList.toggle('active');
+            menuToggle.textContent = navMenu.classList.contains('active') ? '×' : '☰';
         });
 
         // Close mobile menu when clicking outside
         document.addEventListener('click', (e) => {
             if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
                 navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.textContent = '☰';
             }
         });
+
+        // Smooth scroll to sections
+        const navLinks = document.querySelectorAll('.nav-link, .cta-button, .footer-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const sectionId = link.getAttribute('data-section');
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: { y: section, offsetY: 70 },
+                        ease: 'power3.inOut'
+                    });
+                }
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+
+        // Stats number animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(number => {
+            const target = parseFloat(number.getAttribute('data-target'));
+            gsap.fromTo(number, 
+                { textContent: 0 }, 
+                { 
+                    textContent: target,
+                    duration: 2,
+                    ease: 'power1.out',
+                    snap: { textContent: target > 100 ? 1 : 0.1 },
+                    scrollTrigger: {
+                        trigger: number,
+                        start: 'top 80%',
+                        toggleActions: 'play none none reset'
+                    },
+                    onUpdate: function() {
+                        number.textContent = target > 100 ? 
+                            Math.round(number.textContent).toLocaleString() : 
+                            parseFloat(number.textContent).toFixed(1);
+                    }
+                }
+            );
+        });
+
+        // Hamburger lines animation (simulated with text transform)
+        gsap.to('.menu-toggle', {
+            rotate: 0,
+            duration: 0.3,
+            ease: 'power2.inOut',
+            paused: true,
+            onComplete: () => menuToggle.textContent = '×'
+        });
+
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        const cursorTrail = document.getElementById('cursorTrail');
+
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { 
+                x: e.clientX, 
+                y: e.clientY, 
+                duration: 0.1 
+            });
+            gsap.to(cursorTrail, { 
+                x: e.clientX, 
+                y: e.clientY, 
+                duration: 0.3,
+                ease: 'power2.out' 
+            });
+        });
+
+        // Hover effects for cursor
+        document.querySelectorAll('a, button, .feature-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                gsap.to(cursor, { scale: 1.5, opacity: 0.8, duration: 0.2 });
+                gsap.to(cursorTrail, { scale: 0, duration: 0.2 });
+            });
+            el.addEventListener('mouseleave', () => {
+                gsap.to(cursor, { scale: 1, opacity: 0.5, duration: 0.2 });
+                gsap.to(cursorTrail, { scale: 1, duration: 0.2 });
+            });
+        });
+
+        // Particle animation
+        const particlesContainer = document.getElementById('particles');
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.animationDuration = `${10 + Math.random() * 10}s`;
+            particlesContainer.appendChild(particle);
+            setTimeout(() => particle.remove(), 15000);
+        }
+        setInterval(createParticle, 500);
     </script>
 </body>
 </html>
