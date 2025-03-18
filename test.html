@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Pro - Advanced PDF Reader with Voice Synthesis</title>
+    <meta name="description" content="Transform your PDFs into an immersive audio experience with PDF  Pro. Upload, analyze, and listen to your documents with customizable voices and advanced features.">
+    <meta name="keywords" content="PDF reader, text to speech, PDF audio, voice synthesis, document reader, accessibility tool">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --secondary: #9333ea;
+            --accent: #ff007a;
+            --dark: #0d1b2a;
+            --darker: #0a1622;
+            --light: #e0f7fa;
+            --gradient-main: linear-gradient(135deg, #0d1b2a, #1b263b);
+            --gradient-accent: linear-gradient(90deg, var(--primary), var(--accent));
+            --gradient-button: linear-gradient(90deg, var(--primary), var(--secondary));
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--gradient-main);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            position: relative;
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient-accent);
+            border-radius: 3px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .controls-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                circle at center,
+                rgba(34, 211, 238, 0.1) 0%,
+                rgba(34, 211, 238, 0) 70%
+            );
+            z-index: -1;
+            animation: pulse 15s infinite linear;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.3;
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .panel-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        /* Upload Section */
+        .upload-container {
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed rgba(34, 211, 238, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-standard);
+        }
+
+        .upload-container:hover {
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Controls Group */
+        .controls-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .control-item {
+            position: relative;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .control-select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            color: var(--light);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            appearance: none;
+            transition: var(--transition-standard);
+        }
+
+        .control-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(255, 0, 122, 0.3);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            pointer-events: none;
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .buttons-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        /* Player Section */
+        .player-panel {
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .visualizer-container {
+            position: relative;
+            height: 150px;
+            background: var(--darker);
+            overflow: hidden;
+        }
+
+        .wave-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 5%;
+        }
+
+        .wave-bar {
+            width: 4px;
+            height: 30%;
+            background: linear-gradient(to top, var(--primary), var(--accent));
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+
+        .text-display {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .text-content {
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(34, 211, 238, 0.2);
+            gap: 1rem;
+        }
+
+        .player-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--light);
+            transition: var(--transition-standard);
+        }
+
+        .player-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .player-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .play-btn {
+            background: var(--gradient-button);
+            color: white;
+            width: 60px;
+            height: 60px;
+            box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+        }
+
+        .play-btn:hover:not(:disabled) {
+            transform: scale(1.15);
+            box-shadow: 0 7px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2.5px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: var(--gradient-accent);
+            border-radius: 2.5px;
+            transition: width 0.3s linear;
+        }
+
+        /* Loading Indicator */
+        .loader {
+            display: none;
+            position: relative;
+            margin: 2rem auto;
+            width: 80px;
+            height: 80px;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            animation: loader-spin 1s ease infinite;
+        }
+
+        @keyframes loader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* 3D PDF Object */
+        .pdf-3d-container {
+            position: absolute;
+            right: -100px;
+            top: 50px;
+            width: 300px;
+            height: 300px;
+            perspective: 800px;
+            z-index: 5;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .pdf-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 20s infinite linear;
+        }
+
+        .pdf-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.3);
+            backface-visibility: visible;
+        }
+
+        .pdf-face:nth-child(1) {
+            transform: translateZ(50px);
+        }
+
+        .pdf-face:nth-child(2) {
+            transform: rotateY(180deg) translateZ(50px);
+        }
+
+        .pdf-face:nth-child(3) {
+            transform: rotateY(90deg) translateZ(50px);
+            width: 100px;
+        }
+
+        .pdf-face:nth-child(4) {
+            transform: rotateY(-90deg) translateZ(150px);
+            width: 100px;
+        }
+
+        .pdf-face:nth-child(5) {
+            transform: rotateX(90deg) translateZ(50px);
+            height: 100px;
+        }
+
+        .pdf-face:nth-child(6) {
+            transform: rotateX(-90deg) translateZ(150px);
+            height: 100px;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotateY(0) rotateX(15deg);
+            }
+            100% {
+                transform: rotateY(360deg) rotateX(15deg);
+            }
+        }
+
+        /* Background Elements */
+        .bg-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            opacity: 0.15;
+        }
+
+        .bg-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: var(--primary);
+            opacity: 0.3;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid var(--primary);
+            opacity: 0.2;
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* Features Section */
+        .features-section {
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-accent);
+            border-radius: 2px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 992px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-card {
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            transition: var(--transition-standard);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: rgba(10, 25, 41, 0.95);
+            color: var(--light);
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            pointer-events: none;
+            border: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--gradient-button);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            font-size: 1.5rem;
+        }
+
+        .toast-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .toast-message {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .content-grid {
+                gap: 1.5rem;
+            }
+            
+            .controls-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .pdf-3d-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-lines" id="bgLines"></div>
+    <div class="particles-container" id="particles"></div>
+    
+    <!-- 3D PDF Object -->
+    <div class="pdf-3d-container">
+        <div class="pdf-3d">
+            <div class="pdf-face"></div>
+            <div class="pdf-face"></div>
+            <div class="pdf-face"></div>
+            <div class="pdf-face"></div>
+            <div class="pdf-face"></div>
+            <div class="pdf-face"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo">PDF  PRO</h1>
+            <p class="tagline">Transform your documents into an immersive audio experience.</p>
+        </header>
+        
+        <main>
+            <div class="content-grid">
+                <!-- Controls Panel -->
+                <div class="controls-panel">
+                    <div class="panel-header">
+                        <i class="panel-icon fas fa-cogs"></i>
+                        <h2 class="panel-title">CONTROL CENTER</h2>
+                    </div>
+                    
+                    <div class="upload-container" id="uploadContainer">
+                        <i class="upload-icon fas fa-file-pdf"></i>
+                        <h3 class="upload-text">Drag & Drop PDF or Click to Upload</h3>
+                        <p class="upload-subtext">Max file size: 20MB</p>
+                        <input type="file" id="pdfFile" class="file-input" accept=".pdf">
+                    </div>
+                    
+                    <div class="controls-group">
+                        <div class="control-item">
+                            <label class="control-label" for="voiceSelect">Voice Profile</label>
+                            <select id="voiceSelect" class="control-select">
+                                <option value="" disabled selected>Select voice</option>
+                                <!-- Will be populated by JavaScript -->
+                            </select>
+                            <i class="select-arrow fas fa-chevron-down"></i>
+                        </div>
+                        
+                        <div class="control-item">
+                            <label class="control-label" for="speedSelect">Playback Speed</label>
+                            <select id="speedSelect" class="control-select">
+                                <option value="0.5">Quantum Slow (0.5x)</option>
+                                <option value="0.75">Sublight (0.75x)</option>
+                                <option value="1" selected>Standard Orbit (1x)</option>
+                                <option value="1.25">Hyper Speed (1.25x)</option>
+                                <option value="1.5">Warp Drive (1.5x)</option>
+                                <option value="2">Quantum Leap (2x)</option>
+                            </select>
+                            <i class="select-arrow fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="controls-group">
+                        <div class="control-item">
+                            <label class="control-label" for="pitchSelect">Voice Pitch</label>
+                            <select id="pitchSelect" class="control-select">
+                                <option value="0.8">Deep Bass</option>
+                                <option value="0.9">Low</option>
+                                <option value="1" selected>Standard</option>
+                                <option value="1.1">High</option>
+                                <option value="1.2">Ultra High</option>
+                            </select>
+                            <i class="select-arrow fas fa-chevron-down"></i>
+                        </div>
+                        
+                        <div class="control-item">
+                            <label class="control-label" for="langDetect">Auto Language Detection</label>
+                            <select id="langDetect" class="control-select">
+                                <option value="true" selected>Enabled</option>
+                                <option value="false">Disabled</option>
+                            </select>
+                            <i class="select-arrow fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-group">
+                        <button id="processBtn" class="btn btn-primary" disabled>
+                            <i class="fas fa-magic"></i> Process PDF
+                        </button>
+                        <button id="summaryBtn" class="btn btn-secondary" disabled>
+                            <i class="fas fa-compress-alt"></i> Generate Summary
+                        </button>
+                    </div>
+                    
+                    <div id="loader" class="loader"></div>
+                </div>
+                
+                <!-- Player Panel -->
+                <div class="player-panel">
+                    <div class="visualizer-container">
+                        <div class="wave-container" id="waveContainer"></div>
+                    </div>
+                    
+                    <div class="text-display">
+                        <div id="textContent" class="text-content">
+                            Upload a PDF to view its content here. The text will be analyzed and prepared for voice synthesis.
+                        </div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                    
+                    <div class="player-controls">
+                        <button id="prevBtn" class="player-btn" disabled>
+                            <i class="fas fa-step-backward"></i>
+                        </button>
+                        <button id="rewindBtn" class="player-btn" disabled>
+                            <i class="fas fa-backward"></i>
+                        </button>
+                        <button id="playBtn" class="player-btn play-btn" disabled>
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button id="forwardBtn" class="player-btn" disabled>
+                            <i class="fas fa-forward"></i>
+                        </button>
+                        <button id="nextBtn" class="player-btn" disabled>
+                            <i class="fas fa-step-forward"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title">FLAGSHIP FEATURES</h2>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="feature-icon fas fa-brain"></i>
+                        <h3 class="feature-title">Advanced Text Analysis</h3>
+                        <p class="feature-desc">Our AI-powered engine analyzes document structure, context, and meaning to deliver natural-sounding speech with correct emphasis and pacing.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="feature-icon fas fa-microphone-alt"></i>
+                        <h3 class="feature-title">Premium Voice Selection</h3>
+                        <p class="feature-desc">Choose from dozens of high-quality synthetic voices across multiple languages, genders, and accents for a personalized experience.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="feature-icon fas fa-language"></i>
+                        <h3 class="feature-title">Multi-language Support</h3>
+                        <p class="feature-desc">Automatic language detection and voice switching for multilingual documents with support for over 30 languages.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="feature-icon fas fa-universal-access"></i>
+                        <h3 class="feature-title">Accessibility First</h3>
+                        <p class="feature-desc">Designed with accessibility in mind, helping users with visual impairments or reading difficulties to consume document content.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="feature-icon fas fa-magic"></i>
+                        <h3 class="feature-title">Smart Summarization</h3>
+                        <p class="feature-desc">Generate concise summaries of long documents to quickly grasp key <!-- Continuing the Features Section -->
+                            points and decide if you want to listen to the full content.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="feature-icon fas fa-cloud"></i>
+                            <h3 class="feature-title">Cloud Sync & History</h3>
+                            <p class="feature-desc">Save your reading progress and access your document history from any device with our secure cloud synchronization.</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <p>© 2025 PDF  Pro. All rights reserved. | Transforming the way you experience documents.</p>
+            </footer>
+        </div>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">
+            <div class="toast-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="toast-content">
+                <div id="toastTitle" class="toast-title">Success</div>
+                <div id="toastMessage" class="toast-message">Operation completed successfully.</div>
+            </div>
+        </div>
+        
+        <!-- Scripts -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+       <script>
+        // Set PDF.js worker source
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+
+// State management
+const synth = window.speechSynthesis;
+let voices = [];
+let currentPDF = null;
+let extractedText = '';
+let chunks = [];
+let currentChunk = 0;
+let isPlaying = false;
+let currentUtterance = null;
+let visualizerInterval = null;
+
+// DOM Elements
+const elements = {
+    pdfFile: document.getElementById('pdfFile'),
+    uploadContainer: document.getElementById('uploadContainer'),
+    voiceSelect: document.getElementById('voiceSelect'),
+    speedSelect: document.getElementById('speedSelect'),
+    pitchSelect: document.getElementById('pitchSelect'),
+    processBtn: document.getElementById('processBtn'),
+    summaryBtn: document.getElementById('summaryBtn'),
+    playBtn: document.getElementById('playBtn'),
+    prevBtn: document.getElementById('prevBtn'),
+    nextBtn: document.getElementById('nextBtn'),
+    rewindBtn: document.getElementById('rewindBtn'),
+    forwardBtn: document.getElementById('forwardBtn'),
+    textContent: document.getElementById('textContent'),
+    progressBar: document.getElementById('progressBar'),
+    loader: document.getElementById('loader'),
+    waveContainer: document.getElementById('waveContainer'),
+    toast: document.getElementById('toast'),
+    toastTitle: document.getElementById('toastTitle'),
+    toastMessage: document.getElementById('toastMessage')
+};
+
+// Load Voices
+function loadVoices() {
+    voices = synth.getVoices();
+    if (!voices.length) return; // Wait for voices to load if empty
+
+    elements.voiceSelect.innerHTML = '';
+    const languageGroups = {};
+
+    voices.forEach(voice => {
+        const lang = voice.lang.split('-')[0];
+        languageGroups[lang] = languageGroups[lang] || [];
+        languageGroups[lang].push(voice);
+    });
+
+    Object.keys(languageGroups).sort().forEach(lang => {
+        const optgroup = document.createElement('optgroup');
+        const langName = new Intl.DisplayNames(['en'], { type: 'language' }).of(lang) || lang.toUpperCase();
+        optgroup.label = langName;
+
+        languageGroups[lang].forEach(voice => {
+            const option = document.createElement('option');
+            option.value = voices.indexOf(voice);
+            option.textContent = voice.name;
+            optgroup.appendChild(option);
+        });
+
+        elements.voiceSelect.appendChild(optgroup);
+    });
+
+    const defaultVoice = voices.findIndex(voice => voice.lang.startsWith('en-'));
+    elements.voiceSelect.value = defaultVoice !== -1 ? defaultVoice : (voices.length > 0 ? 0 : '');
+}
+
+// Initialize voices with fallback
+synth.onvoiceschanged = loadVoices;
+loadVoices(); // Initial call
+
+// Create wave bars for visualizer
+function createWaveBars(count = 50) {
+    elements.waveContainer.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'wave-bar';
+        bar.style.height = '5%';
+        elements.waveContainer.appendChild(bar);
+    }
+}
+createWaveBars();
+
+// Visualizer animation
+function startVisualizer() {
+    if (visualizerInterval) clearInterval(visualizerInterval);
+    const bars = elements.waveContainer.querySelectorAll('.wave-bar');
+    visualizerInterval = setInterval(() => {
+        bars.forEach(bar => {
+            bar.style.height = isPlaying ? `${Math.random() * 70 + 10}%` : '5%';
+        });
+    }, 100);
+}
+
+function stopVisualizer() {
+    if (visualizerInterval) {
+        clearInterval(visualizerInterval);
+        visualizerInterval = null;
+    }
+    const bars = elements.waveContainer.querySelectorAll('.wave-bar');
+    bars.forEach(bar => bar.style.height = '5%');
+}
+
+// Process PDF file
+async function processPDF(file) {
+    elements.loader.style.display = 'block';
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        currentPDF = pdf;
+
+        let text = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            text += textContent.items.map(item => item.str).join(' ') + '\n\n';
+            elements.progressBar.style.width = `${(i / pdf.numPages) * 100}%`;
+        }
+
+        extractedText = text.trim();
+        elements.textContent.textContent = extractedText;
+        chunks = splitTextIntoChunks(extractedText);
+
+        // Enable controls
+        [elements.playBtn, elements.summaryBtn, elements.prevBtn, elements.nextBtn, elements.rewindBtn, elements.forwardBtn]
+            .forEach(btn => btn.disabled = false);
+
+        showToast('PDF Processed', 'Your document is ready for playback!', 'success');
+    } catch (error) {
+        console.error('Error processing PDF:', error);
+        elements.textContent.textContent = 'Error processing PDF. Please try another file.';
+        showToast('Processing Error', 'Could not read PDF file.', 'error');
+    } finally {
+        elements.loader.style.display = 'none';
+        elements.progressBar.style.width = '0%';
+    }
+}
+
+// Split text into chunks
+function splitTextIntoChunks(text, wordsPerChunk = 200) {
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    const chunks = [];
+    for (let i = 0; i < words.length; i += wordsPerChunk) {
+        chunks.push(words.slice(i, i + wordsPerChunk).join(' '));
+    }
+    return chunks.length ? chunks : ['No readable text found.'];
+}
+
+// Generate summary
+function generateSummary() {
+    if (!extractedText) return;
+
+    const paragraphs = extractedText.split('\n\n').filter(p => p.trim());
+    const summary = paragraphs.map(p => {
+        const match = p.match(/[^.!?]+[.!?]+/);
+        return match ? match[0].trim() : p.split(' ').slice(0, 20).join(' ') + '...';
+    }).join(' ');
+
+    elements.textContent.textContent = summary || 'No summary available.';
+    showToast('Summary Generated', 'Displaying a condensed version.', 'info');
+}
+
+// Speak text
+function speak(text) {
+    if (!text || !voices.length) {
+        showToast('Error', 'No text or voices available.', 'error');
+        return;
+    }
+
+    if (synth.speaking) synth.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voiceIndex = parseInt(elements.voiceSelect.value);
+    utterance.voice = voices[voiceIndex] || voices[0];
+    utterance.rate = parseFloat(elements.speedSelect.value) || 1;
+    utterance.pitch = parseFloat(elements.pitchSelect.value) || 1;
+
+    utterance.onstart = () => {
+        isPlaying = true;
+        elements.playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        startVisualizer();
+    };
+
+    utterance.onend = () => {
+        isPlaying = false;
+        elements.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        stopVisualizer();
+        if (currentChunk < chunks.length - 1) {
+            currentChunk++;
+            speak(chunks[currentChunk]);
+            updateTextDisplay();
+        }
+    };
+
+    utterance.onerror = (event) => {
+        console.error('SpeechSynthesis Error:', event);
+        isPlaying = false;
+        elements.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        stopVisualizer();
+        showToast('Playback Error', `Speech synthesis failed: ${event.error}`, 'error');
+    };
+
+    currentUtterance = utterance;
+    synth.speak(utterance);
+}
+
+// Update text display
+function updateTextDisplay() {
+    if (!chunks.length) return;
+    elements.textContent.textContent = chunks[currentChunk];
+    elements.progressBar.style.width = `${((currentChunk + 1) / chunks.length) * 100}%`;
+}
+
+// Show toast notification
+function showToast(title, message, type = 'success') {
+    elements.toastTitle.textContent = title;
+    elements.toastMessage.textContent = message;
+
+    const icon = elements.toast.querySelector('.toast-icon i');
+    icon.className = `fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}`;
+
+    elements.toast.classList.add('show');
+    setTimeout(() => elements.toast.classList.remove('show'), 3000);
+}
+
+// Event Listeners
+elements.pdfFile.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+        showToast('Invalid File', 'Please select a PDF file.', 'error');
+        return;
+    }
+
+    if (file.size > 20 * 1024 * 1024) {
+        showToast('File Too Large', 'Maximum file size is 20MB.', 'error');
+        return;
+    }
+
+    elements.uploadContainer.style.borderColor = 'var(--primary)';
+    elements.processBtn.disabled = false;
+    const filename = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+    elements.uploadContainer.querySelector('.upload-text').textContent = filename;
+});
+
+elements.processBtn.addEventListener('click', () => {
+    const file = elements.pdfFile.files[0];
+    if (file) processPDF(file);
+});
+
+elements.summaryBtn.addEventListener('click', generateSummary);
+
+elements.playBtn.addEventListener('click', () => {
+    if (!chunks.length) return;
+
+    if (isPlaying) {
+        synth.pause();
+        isPlaying = false;
+        elements.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+        stopVisualizer();
+    } else {
+        if (synth.paused && currentUtterance) {
+            synth.resume();
+            isPlaying = true;
+            elements.playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            startVisualizer();
+        } else {
+            speak(chunks[currentChunk]);
+            updateTextDisplay();
+        }
+    }
+});
+
+elements.prevBtn.addEventListener('click', () => {
+    if (currentChunk > 0) {
+        currentChunk--;
+        if (isPlaying) {
+            synth.cancel();
+            speak(chunks[currentChunk]);
+        }
+        updateTextDisplay();
+    }
+});
+
+elements.nextBtn.addEventListener('click', () => {
+    if (currentChunk < chunks.length - 1) {
+        currentChunk++;
+        if (isPlaying) {
+            synth.cancel();
+            speak(chunks[currentChunk]);
+        }
+        updateTextDisplay();
+    }
+});
+
+elements.rewindBtn.addEventListener('click', () => {
+    currentChunk = 0;
+    if (isPlaying) {
+        synth.cancel();
+        speak(chunks[currentChunk]);
+    }
+    updateTextDisplay();
+});
+
+elements.forwardBtn.addEventListener('click', () => {
+    if (chunks.length > 0) {
+        currentChunk = chunks.length - 1;
+        if (isPlaying) {
+            synth.cancel();
+            speak(chunks[currentChunk]);
+        }
+        updateTextDisplay();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Drag-and-drop first (unchanged)
+    elements.uploadContainer.addEventListener('drop', (e) => {
+        e.preventDefault();
+        elements.uploadContainer.style.borderColor = 'var(--primary)';
+        elements.uploadContainer.style.transform = 'scale(1)';
+
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+
+        if (file.type !== 'application/pdf') {
+            showToast('Invalid File', 'Please select a PDF file.', 'error');
+            return;
+        }
+
+        if (file.size > 20 * 1024 * 1024) {
+            showToast('File Too Large', 'Maximum file size is 20MB.', 'error');
+            return;
+        }
+
+        elements.pdfFile.files = e.dataTransfer.files;
+        elements.processBtn.disabled = false;
+        const filename = file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+        elements.uploadContainer.querySelector('.upload-text').textContent = filename;
+    });
+
+    elements.uploadContainer.addEventListener('dragleave', () => {
+        elements.uploadContainer.style.borderColor = 'rgba(34, 211, 238, 0.5)';
+        elements.uploadContainer.style.transform = 'scale(1)';
+    });
+
+    elements.uploadContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        elements.uploadContainer.style.borderColor = 'var(--accent)';
+        elements.uploadContainer.style.transform = 'scale(1.02)';
+    });
+
+    // Animations last: Blocks come up from below with opacity 0 to 1
+    gsap.from('.feature-card', { 
+        duration: 0.8, 
+        y: 50, // Starts 50px below
+        opacity: 1, // Starts invisible
+        stagger: 0.1, 
+        delay: 1.2, 
+        ease: 'back.out(1.7)' 
+    });
+
+    gsap.from('.controls-panel, .player-panel', { 
+        duration: 1, 
+        y: 30, // Starts 30px below
+        opacity: 0, // Starts invisible
+        stagger: 0.3, 
+        delay: 0.8, 
+        ease: 'power3.out' 
+    });
+
+    gsap.from('.tagline', { 
+        duration: 1, 
+        y: 20, // Starts 20px below (changed from -20 to positive)
+        opacity: 0, // Starts invisible
+        delay: 0.5 
+    });
+
+    gsap.from('.logo', { 
+        duration: 1.5, 
+        y: 50, // Starts 50px below (changed from -50 to positive)
+        opacity: 0, // Starts invisible
+        ease: 'elastic.out(1, 0.5)' 
+    });
+});
+       </script>
+    </body>
+    </html>

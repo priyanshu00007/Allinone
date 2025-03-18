@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaceFlow - Enterprise SaaS Platform</title>
+    <meta name="description" content="SpaceFlow - The all-in-one SaaS platform for modern businesses. Streamline operations, boost productivity, and scale your business with ease.">
+    <meta name="keywords" content="saas, business software, productivity, analytics, automation, enterprise solution">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.3.2/countUp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --secondary: #9333ea;
+            --accent: #ff007a;
+            --dark: #0d1b2a;
+            --darker: #0a1622;
+            --light: #e0f7fa;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0d1b2a, #1b263b);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .navbar {
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-sticky {
+            @apply shadow-lg bg-opacity-90;
+            background-color: rgba(10, 22, 34, 0.95);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, #22d3ee, #ff007a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(90deg, #22d3ee, #9333ea);
+        }
+        
+        .gradient-border {
+            border-image: linear-gradient(90deg, #22d3ee, #ff007a) 1;
+        }
+        
+        .hero-bg {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="%230d1b2a"/><circle cx="10" cy="10" r="1" fill="%2322d3ee" fill-opacity="0.3"/><circle cx="30" cy="40" r="0.5" fill="%2322d3ee" fill-opacity="0.2"/><circle cx="70" cy="30" r="0.8" fill="%2322d3ee" fill-opacity="0.3"/><circle cx="90" cy="60" r="0.6" fill="%2322d3ee" fill-opacity="0.2"/><circle cx="50" cy="80" r="0.7" fill="%2322d3ee" fill-opacity="0.3"/><circle cx="20" cy="60" r="0.4" fill="%2322d3ee" fill-opacity="0.2"/><circle cx="80" cy="10" r="0.5" fill="%2322d3ee" fill-opacity="0.3"/></svg>');
+        }
+        
+        .card {
+            background: rgba(11, 27, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #22d3ee, #9333ea);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.6);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #22d3ee, #ff007a) 1;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            box-shadow: 0 0 15px rgba(255, 0, 122, 0.4);
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.1), rgba(255, 0, 122, 0.1));
+        }
+        
+        .stat-card {
+            background: rgba(11, 27, 42, 0.4);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(11, 27, 42, 0.6);
+        }
+        
+        .testimonial-slider {
+            overflow-x: hidden;
+        }
+        
+        .slide-track {
+            animation: scroll 40s linear infinite;
+            display: flex;
+            width: calc(350px * 12);
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-350px * 6)); }
+        }
+        
+        .pricing-card {
+            background: rgba(11, 27, 42, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+        }
+        
+        .pricing-card.popular {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #22d3ee, #ff007a) 1;
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.popular:hover {
+            transform: scale(1.05) translateY(-5px);
+        }
+        
+        .footer-glow {
+            position: relative;
+        }
+        
+        .footer-glow::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to top, rgba(34, 211, 238, 0.2), transparent);
+            pointer-events: none;
+        }
+        
+        .planet {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 30% 30%, #22d3ee, #1a91a1);
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(34, 211, 238, 0.5);
+            position: relative;
+        }
+        
+        .planet::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 30%;
+            height: 20%;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+        
+        .orbit {
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border: 2px solid rgba(34, 211, 238, 0.2);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+        
+        .satellite {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 30px;
+            height: 20px;
+            background: #ff007a;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(255, 0, 122, 0.8);
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .glow-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+        
+        .hamburger {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger span:nth-child(1) {
+            top: 6px;
+        }
+        
+        .hamburger span:nth-child(2) {
+            top: 14px;
+        }
+        
+        .hamburger span:nth-child(3) {
+            top: 22px;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 14px;
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            width: 0%;
+            opacity: 0;
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 14px;
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .slide-in-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .slide-in-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @media (max-width: 768px) {
+            .slide-track {
+                animation: scroll 30s linear infinite;
+                width: calc(300px * 12);
+            }
+            
+            .planet {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .orbit {
+                width: 300px;
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar fixed w-full top-0 z-50 transition-all px-6 py-4 bg-opacity-70 bg-darker">
+        <div class="container mx-auto">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center">
+                    <span class="text-3xl font-bold orbitron gradient-text">SpaceFlow</span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-10">
+                    <a href="#features" class="text-white hover:text-primary transition-all">Features</a>
+                    <a href="#solutions" class="text-white hover:text-primary transition-all">Solutions</a>
+                    <a href="#pricing" class="text-white hover:text-primary transition-all">Pricing</a>
+                    <a href="#testimonials" class="text-white hover:text-primary transition-all">Testimonials</a>
+                    <a href="#contact" class="text-white hover:text-primary transition-all">Contact</a>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#" class="px-4 py-2 rounded-full text-white hover:text-primary transition-all">Login</a>
+                    <a href="#" class="px-6 py-2 rounded-full btn-primary text-white font-medium">Get Started</a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <div class="hamburger" id="hamburger-btn">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div class="md:hidden" id="mobile-menu">
+                <div class="mobile-menu px-2 pt-6 pb-4 space-y-4 hidden">
+                    <a href="#features" class="block py-2 text-white hover:text-primary transition-all">Features</a>
+                    <a href="#solutions" class="block py-2 text-white hover:text-primary transition-all">Solutions</a>
+                    <a href="#pricing" class="block py-2 text-white hover:text-primary transition-all">Pricing</a>
+                    <a href="#testimonials" class="block py-2 text-white hover:text-primary transition-all">Testimonials</a>
+                    <a href="#contact" class="block py-2 text-white hover:text-primary transition-all">Contact</a>
+                    <div class="pt-4 flex flex-col space-y-3">
+                        <a href="#" class="px-4 py-2 rounded-full text-center border border-white text-white">Login</a>
+                        <a href="#" class="px-6 py-2 rounded-full btn-primary text-center text-white font-medium">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero-bg pt-32 pb-20 px-6">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-6 orbitron">
+                        Launch Your Business <span class="gradient-text">Into Orbit</span>
+                    </h1>
+                    <p class="text-lg md:text-xl mb-8 opacity-90 max-w-lg">
+                        The all-in-one SaaS platform that streamlines operations, boosts productivity, and helps your business scale to new dimensions.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#" class="px-8 py-3 rounded-full btn-primary text-white font-medium text-center">
+                            Start Free Trial
+                        </a>
+                        <a href="#" class="px-8 py-3 rounded-full btn-outline text-white font-medium text-center">
+                            Watch Demo <i class="fas fa-play-circle ml-2"></i>
+                        </a>
+                    </div>
+                    <div class="mt-12 flex items-center">
+                        <div class="flex -space-x-2">
+                            <img src="/api/placeholder/40/40" alt="User" class="rounded-full border-2 border-darker">
+                            <img src="/api/placeholder/40/40" alt="User" class="rounded-full border-2 border-darker">
+                            <img src="/api/placeholder/40/40" alt="User" class="rounded-full border-2 border-darker">
+                            <img src="/api/placeholder/40/40" alt="User" class="rounded-full border-2 border-darker">
+                            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-2 border-darker">
+                                <span class="text-xs font-bold">+2k</span>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm opacity-90">Trusted by 2,000+ companies worldwide</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-darker to-transparent opacity-50 lg:hidden"></div>
+                    <div class="relative flex justify-center items-center">
+                        <div class="orbit">
+                            <div class="satellite"></div>
+                        </div>
+                        <div class="planet floating"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Brands Section -->
+    <section class="py-10 px-6 backdrop-blur-sm" style="background: rgba(11, 27, 42, 0.3);">
+        <div class="container mx-auto">
+            <div class="text-center mb-8">
+                <p class="text-lg opacity-70">Trusted by innovative companies</p>
+            </div>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                <div class="w-28 h-12 opacity-50 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" fill="currentColor" class="w-full">
+                        <path d="M20 5h-3v20h3V5zm10 0h-3v20h3V5zm-5 5H10v3h15v-3zm0 7H10v3h15v-3z"/>
+                        <path d="M50 5H35v20h15v-3H38V8h12V5z"/>
+                        <path d="M75 5H60v20h3V16h12c2.2 0 4-1.8 4-4v-3c0-2.2-1.8-4-4-4zm1 7c0 .6-.4 1-1 1H63V8h12c.6 0 1 .4 1 1v3z"/>
+                        <path d="M95 5H80v20h15v-3H83v-5h12v-3H83V8h12V5z"/>
+                    </svg>
+                </div>
+                <div class="w-28 h-12 opacity-50 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" fill="currentColor" class="w-full">
+                        <path d="M30 5L20 25h4l2-4h8l2 4h4L30 5zm0 10l2.5-5.3 2.5 5.3H30z"/>
+                        <path d="M45 5v20h3V18h4l6 7h5l-7-8c3-.5 5-2.5 5-5v-2c0-3-2-5-5-5H45zm3 3h7c1 0 2 1 2 2v2c0 1-1 2-2 2h-7V8z"/>
+                        <path d="M65 5v20h4v-8h2.5l4.5 8h4.5l-5-9 5-11h-4.5L71 13h-2V5h-4z"/>
+                    </svg>
+                </div>
+                <div class="w-28 h-12 opacity-50 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" fill="currentColor" class="w-full">
+                        <circle cx="20" cy="15" r="10"/>
+                        <path d="M45 5H35v20h3v-8h7c2.2 0 4-1.8 4-4V9c0-2.2-1.8-4-4-4zm1 7c0 .6-.4 1-1 1h-7V8h7c.6 0 1 .4 1 1v3z"/>
+                        <path d="M60 5c-5.5 0-10 4.5-10 10s4.5 10 10 10 10-4.5 10-10S65.5 5 60 5zm0 17c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/>
+                        <path d="M85 5H75v20h10c5.5 0 10-4.5 10-10S90.5 5 85 5zm0 17h-7V8h7c3.9 0 7 3.1 7 7s-3.1 7-7 7z"/>
+                    </svg>
+                </div>
+                <div class="w-28 h-12 opacity-50 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" fill="currentColor" class="w-full">
+                        <path d="M15 5v20h4V5h-4zm7 0v3h5v17h4V8h5V5H22z"/>
+                        <path d="M48 5l-8 20h4l1.5-4h9l1.5 4h4l-8-20h-4zm-1 13l3-8 3 8h-6z"/>
+                        <path d="M70 5H60v20h10c5 0 9-4 9-9v-2c0-5-4-9-9-9zm5 11c0 3-2 5-5 5h-6V9h6c3 0 5 2 5 5v2z"/>
+                    </svg>
+                </div>
+                <div class="w-28 h-12 opacity-50 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30" fill="currentColor" class="w-full">
+                        <path d="M25 20c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5h5c0-5.5-4.5-10-10-10S10 9.5 10 15s4.5 10 10 10 10-4.5 10-10h-5c0 2.8-2.2 5-5 5z"/>
+                        <path d="M45 5H35v20h10c5.5 0 10-4.5 10-10S50.5 5 45 5zm0 17h-7V8h7c3.9 0 7 3.1 7 7s-3.1 7-7 7z"/>
+                        <path d="M60 5v20h15v-3H63V8h12V5H60z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Section -->
+    <section class="py-20 px-6">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">Driving <span class="gradient-text">Measurable Results</span></h2>
+                <p class="max-w-lg mx-auto opacity-80">Our platform has helped businesses worldwide achieve remarkable growth and efficiency.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="stat-card rounded-xl p-6 text-center fade-in">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">
+                        <span id="stat1">97</span>%
+                    </div>
+                    <div class="text-lg opacity-90">Customer Satisfaction</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center fade-in" style="transition-delay: 100ms;">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2">$<span id="stat2">2.5</span>M</div>
+                    <div class="text-lg opacity-90">Average Annual Savings</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center fade-in" style="transition-delay: 200ms;">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2"><span id="stat3">32</span>%</div>
+                    <div class="text-lg opacity-90">Productivity Increase</div>
+                </div>
+                <div class="stat-card rounded-xl p-6 text-center fade-in" style="transition-delay: 300ms;">
+                    <div class="text-4xl md:text-5xl font-bold gradient-text mb-2"><span id="stat4">10</span>x</div>
+                    <div class="text-lg opacity-90">ROI for Customers</div>
+                </div>
+            </div>
+            <div class="mt-16 bg-darker bg-opacity-50 rounded-xl p-6 fade-in">
+                <h3 class="text-xl md:text-2xl font-bold mb-6 text-center orbitron">Growth Performance Analytics</h3>
+                <div class="h-64 md:h-80">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6">
+        <div class="container mx-auto">
+            <div class="text-center mb-16">
+                <div class="text-primary font-medium mb-2">POWERFUL CAPABILITIES</div>
+                <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">Explore Our <span class="gradient-text">Stellar Features</span></h2>
+                <p class="max-w-lg mx-auto opacity-80">Designed to streamline your workflow and boost productivity across your entire organization.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card rounded-xl p-6 fade-in">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Advanced Analytics</h3>
+                    <p class="opacity-80 mb-6">Comprehensive data visualization and insights to drive better business decisions.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Learn more <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="card rounded-xl p-6 fade-in" style="transition-delay: 100ms;">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">AI-Powered Automation</h3>
+                    <p class="opacity-80 mb-6">Automate repetitive tasks and processes with our intelligent workflow engine.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Learn more <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="card rounded-xl p-6 fade-in" style="transition-delay: 200ms;">
+                    <div class="text-primary text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Enterprise Security</h3>
+                    <p class="opacity-80 mb-6">Bank-level security protocols and compliance measures to protect your data.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Learn more <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </a>
+            </div>
+            
+            <div class="card rounded-xl p-6 fade-in" style="transition-delay: 300ms;">
+                <div class="text-primary text-4xl mb-4">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Seamless Integration</h3>
+                <p class="opacity-80 mb-6">Connect with your favorite tools and services through our extensive API library.</p>
+                <a href="#" class="text-primary hover:underline inline-flex items-center">
+                    Learn more <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="card rounded-xl p-6 fade-in" style="transition-delay: 400ms;">
+                <div class="text-primary text-4xl mb-4">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Mobile Accessibility</h3>
+                <p class="opacity-80 mb-6">Access your workspace anywhere, anytime with our responsive mobile applications.</p>
+                <a href="#" class="text-primary hover:underline inline-flex items-center">
+                    Learn more <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <div class="card rounded-xl p-6 fade-in" style="transition-delay: 500ms;">
+                <div class="text-primary text-4xl mb-4">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Team Collaboration</h3>
+                <p class="opacity-80 mb-6">Enhance productivity with real-time collaboration tools and shared workspaces.</p>
+                <a href="#" class="text-primary hover:underline inline-flex items-center">
+                    Learn more <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+            <a href="#" class="px-8 py-3 rounded-full btn-primary text-white font-medium inline-block">
+                Explore All Features
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Solutions Section -->
+<section id="solutions" class="py-20 px-6 bg-darker">
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <div class="text-primary font-medium mb-2">TAILORED FOR YOUR NEEDS</div>
+            <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">Industry-Specific <span class="gradient-text">Solutions</span></h2>
+            <p class="max-w-lg mx-auto opacity-80">Customized workflows and tools designed for the unique challenges of your industry.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="relative overflow-hidden rounded-xl fade-in slide-in-left">
+                <div class="absolute inset-0 bg-gradient-to-r from-primary to-secondary opacity-20 z-0"></div>
+                <div class="relative z-10 p-8">
+                    <div class="flex items-start justify-between mb-6">
+                        <div>
+                            <div class="text-primary text-5xl mb-4">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-2 orbitron">Enterprise Solutions</h3>
+                        </div>
+                        <div class="bg-primary bg-opacity-20 rounded-full p-2">
+                            <i class="fas fa-arrow-right text-primary"></i>
+                        </div>
+                    </div>
+                    <p class="opacity-80 mb-6">Streamline operations, enhance collaboration, and gain valuable insights with our enterprise-grade platform.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Cross-departmental workflow automation</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Advanced security and compliance features</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Enterprise resource planning integration</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-primary mr-2"></i>
+                            <span>Custom reporting and analytics dashboards</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="px-6 py-2 rounded-full btn-primary text-white font-medium inline-block">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card rounded-xl p-6 fade-in slide-in-right" style="transition-delay: 100ms;">
+                    <div class="text-primary text-3xl mb-4">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Retail & E-commerce</h3>
+                    <p class="opacity-80 mb-4">Manage inventory, optimize sales, and enhance customer experiences.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Discover <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="card rounded-xl p-6 fade-in slide-in-right" style="transition-delay: 200ms;">
+                    <div class="text-primary text-3xl mb-4">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Healthcare</h3>
+                    <p class="opacity-80 mb-4">HIPAA-compliant solutions for patient management and care coordination.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Discover <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="card rounded-xl p-6 fade-in slide-in-right" style="transition-delay: 300ms;">
+                    <div class="text-primary text-3xl mb-4">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Financial Services</h3>
+                    <p class="opacity-80 mb-4">Secure transaction processing and regulatory compliance tools.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Discover <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+                
+                <div class="card rounded-xl p-6 fade-in slide-in-right" style="transition-delay: 400ms;">
+                    <div class="text-primary text-3xl mb-4">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Education</h3>
+                    <p class="opacity-80 mb-4">Learning management systems and student engagement platforms.</p>
+                    <a href="#" class="text-primary hover:underline inline-flex items-center">
+                        Discover <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-20 px-6">
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <div class="text-primary font-medium mb-2">SIMPLE IMPLEMENTATION</div>
+            <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">How <span class="gradient-text">SpaceFlow</span> Works</h2>
+            <p class="max-w-lg mx-auto opacity-80">Get up and running quickly with our streamlined onboarding process.</p>
+        </div>
+        
+        <div class="relative">
+            <div class="absolute left-1/2 top-8 bottom-0 w-1 bg-primary bg-opacity-20 transform -translate-x-1/2 hidden md:block"></div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                <div class="md:text-right fade-in slide-in-left">
+                    <div class="relative">
+                        <div class="hidden md:block absolute right-0 md:-right-12 top-6 w-8 h-8 rounded-full gradient-bg shadow-lg z-10 transform translate-x-1/2"></div>
+                        <div class="card rounded-xl p-6 md:pr-12">
+                            <div class="text-primary text-4xl mb-4 md:hidden">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Step 1: Launch</h3>
+                            <p class="opacity-80">Sign up and create your account with just a few clicks. No credit card required to start your 14-day trial.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:pt-32 fade-in slide-in-right">
+                    <div class="relative">
+                        <div class="hidden md:block absolute left-0 md:-left-12 top-6 w-8 h-8 rounded-full gradient-bg shadow-lg z-10 transform -translate-x-1/2"></div>
+                        <div class="card rounded-xl p-6 md:pl-12">
+                            <div class="text-primary text-4xl mb-4 md:hidden">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Step 2: Configure</h3>
+                            <p class="opacity-80">Our setup wizard will guide you through personalizing the platform to meet your specific business needs.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:pt-32 md:text-right fade-in slide-in-left">
+                    <div class="relative">
+                        <div class="hidden md:block absolute right-0 md:-right-12 top-6 w-8 h-8 rounded-full gradient-bg shadow-lg z-10 transform translate-x-1/2"></div>
+                        <div class="card rounded-xl p-6 md:pr-12">
+                            <div class="text-primary text-4xl mb-4 md:hidden">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Step 3: Collaborate</h3>
+                            <p class="opacity-80">Invite your team members and establish workflows that streamline your operations and boost productivity.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:pt-32 fade-in slide-in-right">
+                    <div class="relative">
+                        <div class="hidden md:block absolute left-0 md:-left-12 top-6 w-8 h-8 rounded-full gradient-bg shadow-lg z-10 transform -translate-x-1/2"></div>
+                        <div class="card rounded-xl p-6 md:pl-12">
+                            <div class="text-primary text-4xl mb-4 md:hidden">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-3">Step 4: Scale</h3>
+                            <p class="opacity-80">Analyze performance metrics, optimize processes, and expand your usage as your business grows.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+            <a href="#" class="px-8 py-3 rounded-full btn-primary text-white font-medium inline-block">
+                Schedule a Demo
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials" class="py-20 px-6 bg-darker">
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <div class="text-primary font-medium mb-2">SUCCESS STORIES</div>
+            <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">What Our <span class="gradient-text">Clients Say</span></h2>
+            <p class="max-w-lg mx-auto opacity-80">Discover how SpaceFlow has transformed businesses around the globe.</p>
+        </div>
+        
+        <div class="testimonial-slider">
+            <div class="slide-track">
+                <!-- Testimonial 1 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">SpaceFlow has revolutionized how we manage our operations. The analytics dashboard alone has helped us identify cost-saving opportunities we never knew existed.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Sarah Johnson" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Sarah Johnson</h4>
+                                <p class="text-sm opacity-70">CTO, TechNova</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">The integration capabilities are incredible. We've connected all our existing tools seamlessly, which has eliminated data silos and improved our decision-making process.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Michael Chen" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Michael Chen</h4>
+                                <p class="text-sm opacity-70">COO, GrowthForce</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">Implementation was a breeze. The onboarding team guided us through every step, and we were fully operational within days, not months like our previous solution.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Emily Rodriguez" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Emily Rodriguez</h4>
+                                <p class="text-sm opacity-70">CEO, Innovate Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 4 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">The security features give us peace of mind. In a world where data breaches are common, knowing our sensitive information is protected is invaluable to our business.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="David Wilson" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">David Wilson</h4>
+                                <p class="text-sm opacity-70">CISO, SecureEdge</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 5 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">Our team's productivity has increased by 40% since implementing SpaceFlow. The intuitive interface and automation capabilities have eliminated so much manual work.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Jessica Kim" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Jessica Kim</h4>
+                                <p class="text-sm opacity-70">VP of Operations, NextLevel</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 6 -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">Customer support is exceptional. Any time we've had questions or needed assistance, their team has been responsive, knowledgeable, and genuinely helpful.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Robert Taylor" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Robert Taylor</h4>
+                                <p class="text-sm opacity-70">Director, EliteCorp</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Duplicate testimonials for infinite scroll -->
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">SpaceFlow has revolutionized how we manage our operations. The analytics dashboard alone has helped us identify cost-saving opportunities we never knew existed.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Sarah Johnson" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Sarah Johnson</h4>
+                                <p class="text-sm opacity-70">CTO, TechNova</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">The integration capabilities are incredible. We've connected all our existing tools seamlessly, which has eliminated data silos and improved our decision-making process.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Michael Chen" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Michael Chen</h4>
+                                <p class="text-sm opacity-70">COO, GrowthForce</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="px-4 w-80 md:w-96">
+                    <div class="card rounded-xl p-6 h-full">
+                        <div class="flex items-center mb-4">
+                            <div class="text-primary text-2xl">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                        </div>
+                        <p class="opacity-90 mb-6">Implementation was a breeze. The onboarding team guided us through every step, and we were fully operational within days, not months like our previous solution.</p>
+                        <div class="flex items-center mt-auto">
+                            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+                                <img src="/api/placeholder/48/48" alt="Emily Rodriguez" class="w-full h-full object-cover">
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Emily Rodriguez</h4>
+                                <p class="text-sm opacity-70">CEO, Innovate Inc.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+            <a href="#" class="px-8 py-3 rounded-full btn-outline text-white font-medium inline-block">
+                Read Success Stories
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section id="pricing" class="py-20 px-6">
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <div class="text-primary font-medium mb-2">TRANSPARENT PRICING</div>
+            <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">Choose Your <span class="gradient-text">Perfect Plan</span></h2>
+            <p class="max-w-lg mx-auto opacity-80">Flexible options designed to fit businesses of all sizes. No hidden fees.</p>
+            
+            <div class="flex justify-center mt-8">
+                <div class="bg-darker p-1 rounded-full inline-flex">
+                    <button class="pricing-toggle active px-6 py-2 rounded-full text-white">Monthly</button>
+                    <button class="pricing-toggle px-6 py-2 rounded-full text-white opacity-70">Annual</button>
+                </div>
+                <div class="ml-2 bg-primary bg-opacity-20 text-primary text-sm px-3 py-1 rounded-full">Save 20%</div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Starter Plan -->
+            <div class="pricing-card rounded-xl p-6 fade-in">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold mb-2">Starter</h3>
+                    <p class="opacity-70 mb-4">Perfect for small teams</p>
+                    <div class="flex justify-center items-baseline">
+                        <span class="text-4xl font-bold">$29</span>
+                        <span class="text-lg opacity-70 ml-1">/month</span>
+                    </div>
+                </div>
+                <div class="glow-line my-6"></div>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Up to 5 team members</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Basic analytics dashboard</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>5GB storage space</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Email support</span>
+                    </li>
+                    <li class="flex items-start opacity-50">
+                        <i class="fas fa-times mt-1 mr-3"></i>
+                        <span>Advanced integrations</span>
+                    </li>
+                    <li class="flex items-start opacity-50">
+                        <i class="fas fa-times mt-1 mr-3"></i>
+                        <span>Custom workflows</span>
+                    </li>
+                </ul>
+                <a href="#" class="w-full py-3 rounded-full btn-outline text-white font-medium text-center block">
+                    Start Free Trial
+                </a>
+            </div>
+            
+            <!-- Pro Plan -->
+            <div class="pricing-card popular rounded-xl p-8 fade-in">
+                <div class="bg-primary bg-opacity-20 text-primary text-sm px-3 py-1 rounded-full inline-block mb-4">Most Popular</div>
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold mb-2">Professional</h3>
+                    <p class="opacity-70 mb-4">For growing businesses</p>
+                    <div class="flex justify-center items-baseline">
+                        <span class="text-4xl font-bold">$89</span>
+                        <span class="text-lg opacity-70 ml-1">/month</span>
+                    </div>
+                </div>
+                <div class="glow-line my-6"></div>
+                <ul class="space-y-4 mb-8">
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Up to 20 team members</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Advanced analytics & reporting</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>50GB storage space</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Priority email & chat support</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check text-primary mt-1 mr-3"></i>
+                        <span>Advanced integrations</span>
+                    </li>
+                    <li class="flex items-start opacity-50">
+                        <i class="fas fa-times mt-1 mr-3"></i>
+                        <span>Custom workflows</span>
+                    </li>
+                </ul>
+                <a href="#" class="w-full py-3 rounded-full btn-primary text-white font-medium text-center block">
+                    Start Free Trial
+                </a>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="pricing-card rounded-xl p-6 fade-in">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-bold mb-2">Enterprise</h3>
+                    <p class="opacity-70 mb-4">For large organizations</p>
+                    <div class="flex justify-center items-baseline">
+                        <span class="text-4xl font-bold">$249</span>
+<span class="text-lg opacity-70 ml-1">/month</span>
+</div>
+</div>
+<div class="glow-line my-6"></div>
+<ul class="space-y-4 mb-8">
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>Unlimited team members</span>
+</li>
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>Comprehensive analytics suite</span>
+</li>
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>500GB storage space</span>
+</li>
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>24/7 priority support</span>
+</li>
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>Advanced integrations</span>
+</li>
+<li class="flex items-start">
+    <i class="fas fa-check text-primary mt-1 mr-3"></i>
+    <span>Custom workflows</span>
+</li>
+</ul>
+<a href="#" class="w-full py-3 rounded-full btn-outline text-white font-medium text-center block">
+    Contact Sales
+</a>
+</div>
+</div>
+
+<div class="mt-12 text-center">
+<p class="opacity-70 max-w-2xl mx-auto mb-6">All plans include a 14-day free trial. No credit card required to start. Need something different? Contact our sales team for custom pricing options.</p>
+<a href="#" class="text-primary hover:underline">View full comparison →</a>
+</div>
+</div>
+</section>
+
+<!-- FAQ Section -->
+<section id="faq" class="py-20 px-6 bg-darker">
+<div class="container mx-auto">
+<div class="text-center mb-16">
+    <div class="text-primary font-medium mb-2">COMMON QUESTIONS</div>
+    <h2 class="orbitron text-3xl md:text-4xl font-bold mb-4">Frequently Asked <span class="gradient-text">Questions</span></h2>
+    <p class="max-w-lg mx-auto opacity-80">Find quick answers to common questions about SpaceFlow.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">How does the 14-day trial work?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">Our 14-day trial gives you full access to all features of your selected plan. No credit card is required to start. You'll receive a notification three days before your trial ends with options to continue or cancel. If you choose to continue, you can select your preferred plan and payment method.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">Can I change plans later?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">Yes, you can upgrade or downgrade your plan at any time. When upgrading, the new features will be available immediately and you'll be billed the prorated difference. When downgrading, the change will take effect at the start of your next billing cycle.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">Is my data secure?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">Absolutely. We employ industry-leading security measures including end-to-end encryption, regular security audits, and compliance with GDPR, HIPAA, and other regulations. Your data is stored in SOC 2 compliant data centers with redundant backups. We never share or sell your information to third parties.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">What integrations do you support?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">SpaceFlow connects with over 200 popular tools and services including Slack, Microsoft 365, Google Workspace, Salesforce, HubSpot, Jira, Asana, QuickBooks, and many more. We also offer a robust API for custom integrations with your proprietary systems.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">Do you offer training and support?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">Yes, all plans include access to our comprehensive knowledge base, tutorial videos, and community forums. Professional and Enterprise plans include personalized onboarding sessions, regular check-ins, and priority support. Enterprise customers also receive dedicated account management and custom training programs.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item card rounded-xl p-6 cursor-pointer fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="text-lg font-bold">Can I access SpaceFlow on mobile devices?</h3>
+            <div class="text-primary text-lg ml-4 faq-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+        <div class="faq-answer mt-4 hidden">
+            <p class="opacity-80">Yes, SpaceFlow is fully accessible on mobile devices through our responsive web application and native apps for iOS and Android. The mobile experience includes all essential features, allowing you to stay productive even when you're away from your desk.</p>
+        </div>
+    </div>
+</div>
+
+<div class="mt-12 text-center">
+    <p class="opacity-70 max-w-xl mx-auto">Still have questions? Our team is here to help.</p>
+    <a href="#" class="px-8 py-3 mt-6 rounded-full btn-outline text-white font-medium inline-block">
+        Contact Support
+    </a>
+</div>
+</div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-24 px-6 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-secondary opacity-10"></div>
+<div class="container mx-auto relative z-10">
+<div class="max-w-3xl mx-auto text-center">
+    <h2 class="orbitron text-3xl md:text-5xl font-bold mb-6">Ready to Transform Your Workflow?</h2>
+    <p class="text-lg opacity-80 mb-8 max-w-2xl mx-auto">Join thousands of businesses that have increased productivity and streamlined operations with SpaceFlow.</p>
+    <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#" class="px-8 py-4 rounded-full btn-primary text-white font-medium">
+            Start Your Free Trial
+        </a>
+        <a href="#" class="px-8 py-4 rounded-full btn-outline text-white font-medium">
+            Schedule a Demo
+        </a>
+    </div>
+    <p class="mt-6 opacity-70">No credit card required. 14-day free trial.</p>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="py-16 px-6 bg-darker">
+<div class="container mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-5 gap-12">
+    <div class="md:col-span-2">
+        <div class="mb-6">
+            <img src="/api/placeholder/150/40" alt="SpaceFlow Logo" class="h-10">
+        </div>
+        <p class="opacity-70 mb-6 max-w-md">SpaceFlow helps businesses of all sizes optimize their workflows, improve collaboration, and drive growth through our innovative platform.</p>
+        <div class="flex space-x-4">
+            <a href="#" class="text-white opacity-70 hover:opacity-100 transition">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="text-white opacity-70 hover:opacity-100 transition">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="#" class="text-white opacity-70 hover:opacity-100 transition">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="text-white opacity-70 hover:opacity-100 transition">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div>
+        <h4 class="text-lg font-bold mb-4">Product</h4>
+        <ul class="space-y-3">
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Features</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Solutions</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Pricing</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Updates</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Roadmap</a></li>
+        </ul>
+    </div>
+    
+    <div>
+        <h4 class="text-lg font-bold mb-4">Resources</h4>
+        <ul class="space-y-3">
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Documentation</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Knowledge Base</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Community</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Tutorials</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Webinars</a></li>
+        </ul>
+    </div>
+    
+    <div>
+        <h4 class="text-lg font-bold mb-4">Company</h4>
+        <ul class="space-y-3">
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">About Us</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Careers</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Blog</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Press</a></li>
+            <li><a href="#" class="opacity-70 hover:opacity-100 transition">Contact</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="mt-16 pt-8 border-t border-gray-800">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+            <p class="opacity-70">&copy; 2025 SpaceFlow Inc. All rights reserved.</p>
+        </div>
+        <div class="flex flex-wrap gap-4">
+            <a href="#" class="opacity-70 hover:opacity-100 transition">Terms of Service</a>
+            <a href="#" class="opacity-70 hover:opacity-100 transition">Privacy Policy</a>
+            <a href="#" class="opacity-70 hover:opacity-100 transition">Security</a>
+            <a href="#" class="opacity-70 hover:opacity-100 transition">Cookies</a>
+        </div>
+    </div>
+</div>
+</div>
+</footer>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="fixed bottom-8 right-8 bg-primary p-3 rounded-full shadow-lg opacity-0 invisible transition-all duration-300">
+<i class="fas fa-arrow-up text-white"></i>
+</button>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<script>
+// Back to top button
+const backToTopButton = document.getElementById('back-to-top');
+
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        backToTopButton.classList.remove('opacity-0', 'invisible');
+        backToTopButton.classList.add('opacity-100', 'visible');
+    } else {
+        backToTopButton.classList.remove('opacity-100', 'visible');
+        backToTopButton.classList.add('opacity-0', 'invisible');
+    }
+});
+
+backToTopButton.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+// FAQ Toggles
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const answer = item.querySelector('.faq-answer');
+        const icon = item.querySelector('.faq-icon i');
+        
+        if (answer.classList.contains('hidden')) {
+            answer.classList.remove('hidden');
+            icon.classList.remove('fa-plus');
+            icon.classList.add('fa-minus');
+        } else {
+            answer.classList.add('hidden');
+            icon.classList.remove('fa-minus');
+            icon.classList.add('fa-plus');
+        }
+    });
+});
+
+// Pricing toggle
+const pricingToggles = document.querySelectorAll('.pricing-toggle');
+
+pricingToggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+        pricingToggles.forEach(t => t.classList.remove('active'));
+        toggle.classList.add('active');
+    });
+});
+
+// Mobile menu
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+
+if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+}
+
+// Animations on scroll
+const fadeElements = document.querySelectorAll('.fade-in');
+
+const fadeInOnScroll = () => {
+    fadeElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        
+        if (elementTop < windowHeight - 100) {
+            element.classList.add('visible');
+        }
+    });
+};
+
+// Initial check on load
+fadeInOnScroll();
+
+// Check on scroll
+window.addEventListener('scroll', fadeInOnScroll);
+</script>
+</body>
+</html>

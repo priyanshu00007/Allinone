@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Scope - Camera Text Extractor</title>
+    <meta name="description" content="Capture images from your camera and extract text instantly with Text Scope. Advanced OCR technology in a futuristic interface.">
+    <meta name="keywords" content="OCR, text extraction, camera capture, image to text, document scanner">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --secondary: #9333ea;
+            --accent: #ff007a;
+            --dark: #0d1b2a;
+            --darker: #0a1622;
+            --light: #e0f7fa;
+            --gradient-main: linear-gradient(135deg, #0d1b2a, #1b263b);
+            --gradient-accent: linear-gradient(90deg, var(--primary), var(--accent));
+            --gradient-button: linear-gradient(90deg, var(--primary), var(--secondary));
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--gradient-main);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient-accent);
+            border-radius: 3px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .controls-panel, .preview-panel {
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .panel-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .video-container {
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(34, 211, 238, 0.5);
+        }
+
+        #video {
+            width: 100%;
+            display: block;
+        }
+
+        #canvas {
+            display: none;
+        }
+
+        .buttons-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 2px solid rgba(34, 211, 238, 0.5);
+            display: none;
+        }
+
+        .text-display {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .loader {
+            display: none;
+            position: relative;
+            margin: 2rem auto;
+            width: 80px;
+            height: 80px;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            animation: loader-spin 1s ease infinite;
+        }
+
+        @keyframes loader-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">Text Scope</h1>
+            <p class="tagline">Capture and extract text with cutting-edge technology.</p>
+        </header>
+
+        <main>
+            <div class="content-grid">
+                <div class="controls-panel">
+                    <div class="panel-header">
+                        <i class="panel-icon fas fa-camera"></i>
+                        <h2 class="panel-title">CAPTURE CONTROL</h2>
+                    </div>
+                    <div class="video-container">
+                        <video id="video" autoplay playsinline></video>
+                        <canvas id="canvas"></canvas>
+                    </div>
+                    <div class="buttons-group">
+                        <button id="captureBtn" class="btn btn-primary">
+                            <i class="fas fa-camera"></i> Capture Image
+                        </button>
+                        <button id="extractBtn" class="btn btn-primary" disabled>
+                            <i class="fas fa-text-height"></i> Extract Text
+                        </button>
+                    </div>
+                    <div id="loader" class="loader"></div>
+                </div>
+
+                <div class="preview-panel">
+                    <div class="panel-header">
+                        <i class="panel-icon fas fa-eye"></i>
+                        <h2 class="panel-title">PREVIEW & RESULTS</h2>
+                    </div>
+                    <img id="capturedImage" class="preview-image" src="" alt="Captured Image">
+                    <div id="extractedText" class="text-display">Captured text will appear here...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const capturedImage = document.getElementById('capturedImage');
+        const captureBtn = document.getElementById('captureBtn');
+        const extractBtn = document.getElementById('extractBtn');
+        const extractedText = document.getElementById('extractedText');
+        const loader = document.getElementById('loader');
+
+        // Access camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+                extractedText.textContent = 'Error: Could not access camera. Please allow camera permissions.';
+            });
+
+        // Capture image
+        captureBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const imageData = canvas.toDataURL('image/png');
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+            extractBtn.disabled = false;
+            extractedText.textContent = 'Click "Extract Text" to process the captured image...';
+        });
+
+        // Extract text
+        extractBtn.addEventListener('click', async () => {
+            extractBtn.disabled = true;
+            captureBtn.disabled = true;
+            loader.style.display = 'block';
+            extractedText.textContent = 'Processing image...';
+
+            try {
+                const { data: { text } } = await Tesseract.recognize(
+                    capturedImage.src,
+                    'eng',
+                    { logger: m => console.log(m) }
+                );
+                extractedText.textContent = text || 'No text detected in the image.';
+            } catch (error) {
+                extractedText.textContent = `Error: ${error.message}`;
+            } finally {
+                loader.style.display = 'none';
+                extractBtn.disabled = false;
+                captureBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

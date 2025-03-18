@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Scope - Image Text Extractor</title>
+    <meta name="description" content="Upload images and extract text instantly with Text Scope. Advanced OCR technology in a futuristic interface.">
+    <meta name="keywords" content="OCR, text extraction, image to text, document scanner">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --secondary: #9333ea;
+            --accent: #ff007a;
+            --dark: #0d1b2a;
+            --darker: #0a1622;
+            --light: #e0f7fa;
+            --gradient-main: linear-gradient(135deg, #0d1b2a, #1b263b);
+            --gradient-accent: linear-gradient(90deg, var(--primary), var(--accent));
+            --gradient-button: linear-gradient(90deg, var(--primary), var(--secondary));
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--gradient-main);
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--light);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 3px;
+            background: var(--gradient-accent);
+            border-radius: 3px;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .controls-panel, .preview-panel {
+            background: rgba(11, 27, 42, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        .panel-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .upload-container {
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed rgba(34, 211, 238, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            margin: 1.5rem 0;
+        }
+
+        .upload-container:hover {
+            border-color: var(--accent);
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-subtext {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .buttons-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: var(--gradient-button);
+            color: white;
+            box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(34, 211, 238, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 2px solid rgba(34, 211, 238, 0.5);
+            display: none;
+        }
+
+        .text-display {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .loader {
+            display: none;
+            position: relative;
+            margin: 2rem auto;
+            width: 80px;
+            height: 80px;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            animation: loader-spin 1s ease infinite;
+        }
+
+        @keyframes loader-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 992px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="logo">Text Scope</h1>
+            <p class="tagline">Extract text from your images with advanced OCR technology.</p>
+        </header>
+
+        <main>
+            <div class="content-grid">
+                <div class="controls-panel">
+                    <div class="panel-header">
+                        <i class="panel-icon fas fa-upload"></i>
+                        <h2 class="panel-title">UPLOAD CONTROL</h2>
+                    </div>
+                    <div class="upload-container" id="uploadContainer">
+                        <i class="upload-icon fas fa-image"></i>
+                        <h3 class="upload-text">Drag & Drop Image or Click to Upload</h3>
+                        <p class="upload-subtext">Supported formats: PNG, JPG, JPEG (Max 10MB)</p>
+                        <input type="file" id="imageFile" class="file-input" accept="image/png, image/jpeg, image/jpg">
+                    </div>
+                    <div class="buttons-group">
+                        <button id="extractBtn" class="btn btn-primary" disabled>
+                            <i class="fas fa-text-height"></i> Extract Text
+                        </button>
+                        <button id="clearBtn" class="btn btn-primary" disabled>
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+                    <div id="loader" class="loader"></div>
+                </div>
+
+                <div class="preview-panel">
+                    <div class="panel-header">
+                        <i class="panel-icon fas fa-eye"></i>
+                        <h2 class="panel-title">PREVIEW & RESULTS</h2>
+                    </div>
+                    <img id="previewImage" class="preview-image" src="" alt="Uploaded Image">
+                    <div id="extractedText" class="text-display">Upload an image to extract text...</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Load Tesseract.js -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <script>
+        // Wait for Tesseract to load
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const imageFile = document.getElementById('imageFile');
+            const previewImage = document.getElementById('previewImage');
+            const extractBtn = document.getElementById('extractBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const extractedText = document.getElementById('extractedText');
+            const loader = document.getElementById('loader');
+
+            // Check if Tesseract is loaded
+            if (typeof Tesseract === 'undefined') {
+                extractedText.textContent = 'Error: Tesseract.js failed to load. Please check your internet connection and refresh the page.';
+                console.error('Tesseract.js not loaded');
+                return;
+            }
+
+            // Handle file upload
+            function handleFile(file) {
+                if (!file) return;
+
+                const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+                if (!validTypes.includes(file.type)) {
+                    extractedText.textContent = 'Error: Please upload a valid image (PNG, JPG, JPEG)';
+                    return;
+                }
+
+                if (file.size > 10 * 1024 * 1024) {
+                    extractedText.textContent = 'Error: File size exceeds 10MB limit';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    extractBtn.disabled = false;
+                    clearBtn.disabled = false;
+                    extractedText.textContent = 'Click "Extract Text" to process the image...';
+                    uploadContainer.querySelector('.upload-text').textContent = 
+                        file.name.length > 20 ? file.name.substring(0, 20) + '...' : file.name;
+                };
+                reader.onerror = () => {
+                    extractedText.textContent = 'Error: Failed to read the image file';
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // File input change
+            imageFile.addEventListener('change', (e) => {
+                handleFile(e.target.files[0]);
+            });
+
+            // Drag and drop
+            uploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadContainer.style.borderColor = 'var(--accent)';
+                uploadContainer.style.transform = 'scale(1.02)';
+            });
+
+            uploadContainer.addEventListener('dragleave', () => {
+                uploadContainer.style.borderColor = 'rgba(34, 211, 238, 0.5)';
+                uploadContainer.style.transform = 'scale(1)';
+            });
+
+            uploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadContainer.style.borderColor = 'var(--primary)';
+                uploadContainer.style.transform = 'scale(1)';
+                handleFile(e.dataTransfer.files[0]);
+            });
+
+            // Extract text
+            extractBtn.addEventListener('click', async () => {
+                extractBtn.disabled = true;
+                clearBtn.disabled = true;
+                loader.style.display = 'block';
+                extractedText.textContent = 'Processing image...';
+
+                try {
+                    const { data: { text } } = await Tesseract.recognize(
+                        previewImage.src,
+                        'eng',
+                        { logger: m => console.log(m) }
+                    );
+                    extractedText.textContent = text || 'No text detected in the image.';
+                } catch (error) {
+                    extractedText.textContent = `Error: ${error.message}`;
+                } finally {
+                    loader.style.display = 'none';
+                    extractBtn.disabled = false;
+                    clearBtn.disabled = false;
+                }
+            });
+
+            // Clear everything
+            clearBtn.addEventListener('click', () => {
+                imageFile.value = '';
+                previewImage.src = '';
+                previewImage.style.display = 'none';
+                extractedText.textContent = 'Upload an image to extract text...';
+                uploadContainer.querySelector('.upload-text').textContent = 'Drag & Drop Image or Click to Upload';
+                extractBtn.disabled = true;
+                clearBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+</html>
